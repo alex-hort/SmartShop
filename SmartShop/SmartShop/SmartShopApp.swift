@@ -11,7 +11,7 @@ import SwiftUI
 struct SmartShopApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RegisterView()
         }
     }
 }
