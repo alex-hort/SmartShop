@@ -62,9 +62,6 @@ struct LoginView: View {
             Text(message)
              
         }
-        .navigationDestination(item: $userId, destination: { _ in
-            Text("Home View")
-        })
         .navigationTitle("Login")
     }
 }

@@ -36,10 +36,10 @@ extension AppView{
     var destination: some View{
         switch self{
         case .home:
-            Text("Home")
+            ProductListView()
         case .myProducts:
             NavigationStack{
-                Text("My Products")
+               MyProductsListView()
                     .requiresAuthentication()
             }
         case .cart:
@@ -69,4 +69,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(ProductStore(httpClient: .development))
 }
