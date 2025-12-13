@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum ProductSaveError: Error{
+enum ProductError: Error{
     case missingUserId
     case invalidPrice
     case operationFailed(String)

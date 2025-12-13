@@ -63,3 +63,15 @@ struct CreateProductResponse: Codable{
     let product: Product?
     let message: String?
 }
+
+
+struct UploadDataResponse: Codable{
+    let message: String?
+    let success: Bool
+    let downloadUrl: URL?
+    
+    private enum CodingKeys: String, CodingKey{
+        case message, success
+        case downloadUrl = "downloadUrl"
+    }
+}
