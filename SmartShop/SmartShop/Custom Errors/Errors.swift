@@ -13,6 +13,7 @@ enum ProductError: Error{
     case invalidPrice
     case operationFailed(String)
     case missingImage
+    case productNotFound
 }
 
 

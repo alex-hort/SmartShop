@@ -10,6 +10,8 @@ import PhotosUI
 
 struct AddProductView: View {
     
+    let product: Product?
+    
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var price: Double?
@@ -21,21 +23,24 @@ struct AddProductView: View {
     @Environment(ProductStore.self) private var productSore
     @AppStorage("userId") private var userId: Int?
     
-    @Environment(\.uploader) private var uploader
+    @Environment(\.uploaderDownloader) private var uploaderDownloader
     
+    init(product: Product? = nil ){
+        self.product = product
+    }
     private var isFormValid: Bool{
         !name.isEmptyOrWhitespace && !description.isEmptyOrWhitespace
         && (price ?? 0) > 0
     }
     
-    private func saveProduct() async{
+    private func saveOrUpdateProduct() async{
         do{
             
             guard let uiImage = uiImage, let imageData = uiImage.pngData() else {
                 throw ProductError.missingImage
             }
             
-            let uploadDataResponse = try await uploader.upload(data: imageData)
+            let uploadDataResponse = try await uploaderDownloader.upload(data: imageData)
             
             guard let downloadURL = uploadDataResponse.downloadUrl, uploadDataResponse.success else {
                 throw ProductError.operationFailed(uploadDataResponse.message ?? "")
@@ -49,7 +54,13 @@ struct AddProductView: View {
             }
             
             print(downloadURL)
-            let product = Product(name: name, description: description, price: price, photoUrl: downloadURL, userId: userId)
+            let product = Product(id: self.product?.id, name: name, description: description, price: price, photoUrl: downloadURL, userId: userId)
+            
+            if self.product != nil {
+                try await productSore.updateProduct(product)
+            } else {
+                try await productSore.saveProduct(product)
+            }
             
             try await productSore.saveProduct(product)
             dismiss()
@@ -59,6 +70,10 @@ struct AddProductView: View {
         }
     }
     
+    private var actionTitle: String{
+        product != nil ? "Update Product": "Add product"
+    }
+
     var body: some View {
         Form{
             TextField("Enter name", text: $name)
@@ -78,6 +93,7 @@ struct AddProductView: View {
                     Image(systemName: "camera")
                 }
                 Spacer().frame(width: 20)
+                
                 PhotosPicker( selection: $selectedPhotoItem, matching: .images, photoLibrary: .shared()){
                     Image(systemName: "photo.on.rectangle")
                 }
@@ -88,22 +104,38 @@ struct AddProductView: View {
                 }
             }
             
-          
         
-            
-            
-            .onChange(of: selectedPhotoItem, {
-                selectedPhotoItem?.loadTransferable(type: Data.self) {  result in
-                    switch result {
-                    case .success(let data):
-                        if let data {
+            .task {
+                do{
+                    guard let product = product else {return}
+                    name = product.name
+                    description = product.description
+                    price = product.price
+                    
+                    if let photoUrl = product.photoUrl{
+                        guard let data = try await uploaderDownloader.download(from: photoUrl) else {
+                            return
+                        }
+                        
+                        uiImage = UIImage(data: data)
+                    }
+                } catch{
+                    print(error.localizedDescription)
+                }
+            }
+            .task(id: selectedPhotoItem, {
+                if let selectedPhotoItem{
+                    do{
+                        if let data = try await selectedPhotoItem.loadTransferable(type: Data.self){
                             uiImage = UIImage(data: data)
                         }
-                    case .failure(let failure):
-                        print(failure.localizedDescription)
+                    }catch{
+                        print(error.localizedDescription)
                     }
                 }
             })
+          
+        
             
             .sheet(isPresented: $isCameraSelected) {
                 ImagePicker(sourceType: .camera, image: $uiImage)
@@ -113,13 +145,14 @@ struct AddProductView: View {
                 
         }.toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Save"){
+                Button(actionTitle){
                     Task{
-                        await saveProduct()
+                        await saveOrUpdateProduct()
                     }
                 }.disabled(!isFormValid)
             }
         }
+        
     }
 }
 
@@ -127,5 +160,12 @@ struct AddProductView: View {
     NavigationStack{
         AddProductView()
     }.environment(ProductStore(httpClient: .development))
-        .environment(\.uploader, Uploader(httpClient: .development))
+        .environment(\.uploaderDownloader, UploaderDownloader(httpClient: .development))
+}
+
+#Preview ("Updating product"){
+    NavigationStack{
+        AddProductView(product: Product.preview)
+    }.environment(ProductStore(httpClient: .development))
+        .environment(\.uploaderDownloader, UploaderDownloader(httpClient: .development))
 }

@@ -10,12 +10,12 @@ import SwiftUI
 
 
 private struct UploaderEnvioromentKey: EnvironmentKey{
-    static let defaultValue = Uploader(httpClient: HTTPClient())
+    static let defaultValue = UploaderDownloader(httpClient: HTTPClient())
 }
 
 
 extension EnvironmentValues{
-    var uploader: Uploader{
+    var uploaderDownloader: UploaderDownloader{
         get {self[UploaderEnvioromentKey.self]}
         set {self[UploaderEnvioromentKey.self] = newValue}
     }
