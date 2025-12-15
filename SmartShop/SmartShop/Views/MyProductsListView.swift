@@ -12,6 +12,7 @@ struct MyProductsListView: View {
     @Environment(ProductStore.self) private var productStore
     @State private var isPresented: Bool = false
     @AppStorage("userId") private var userId: Int?
+    @State private var message: String?
     
     private func loadMyProducts() async{
         
@@ -22,7 +23,7 @@ struct MyProductsListView: View {
             }
             try await productStore.loadMyProducts(by: userId)
         }catch{
-            print(error.localizedDescription)
+            message = error.localizedDescription
         }
     }
     
@@ -53,7 +54,10 @@ struct MyProductsListView: View {
             }
         }
         .overlay(alignment: .center){
-            if productStore.myProducts.isEmpty{
+            
+            if let message {
+                Text(message)
+            } else if productStore.myProducts.isEmpty{
                 ContentUnavailableView("No products man", systemImage: "cart")
             }
         }
