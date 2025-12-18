@@ -20,3 +20,7 @@ enum ProductError: Error{
 enum UserError: Error{
     case missingId
 }
+
+enum CartError: Error{
+    case operationFailed(String)
+}

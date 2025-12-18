@@ -162,10 +162,10 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    // ✅ ID del producto por URL
+
     const { productId } = req.params;
 
-    // ✅ Campos a actualizar
+
     const { name, description, price, photo_url, user_id } = req.body;
 
     // 🔒 Validaciones básicas
@@ -192,7 +192,7 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    // 🔍 Buscar producto SOLO por ID
+
     const product = await models.Product.findByPk(productIdNumber);
 
     if (!product) {

@@ -21,7 +21,7 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ message: 'User not found', success: false });
         }
 
-        req.user = user;
+        req.userId = user.id;
         next();
     } catch (error) {
         return res.status(401).json({ message: 'Unauthorized access', success: false });

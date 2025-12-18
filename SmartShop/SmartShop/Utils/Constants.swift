@@ -15,6 +15,9 @@ struct Constants{
         static let products: URL = URL(string: "http://localhost:8080/api/products")!
         static let createProduct: URL = URL(string: "http://localhost:8080/api/products")!
         static let uploadProductImage: URL = URL(string: "http://localhost:8080/api/products/upload")!
+        static let addCartIteem : URL = URL(string: "http://localhost:8080/api/cart/items")!
+        static let loadCart: URL = URL(string: "http://localhost:8080/api/cart")!
+        
         static func myProducts(_ userId: Int) -> URL{
             URL(string: "http://localhost:8080/api/products/user/\(userId)")!
         }
@@ -24,5 +27,7 @@ struct Constants{
         static func updateProduct(_ productId: Int) -> URL {
             URL(string: "http://localhost:8080/api/products/\(productId)")!
         }
+        
+        
     }
 }

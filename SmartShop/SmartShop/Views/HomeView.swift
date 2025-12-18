@@ -32,22 +32,29 @@ extension AppView{
         }
     }
     
+    @MainActor
     @ViewBuilder
     var destination: some View{
         switch self{
         case .home:
-            ProductListView()
+            NavigationStack{
+                ProductListView()
+            }
         case .myProducts:
             NavigationStack{
                MyProductsListView()
                     .requiresAuthentication()
             }
         case .cart:
-            Text("Cart")
-                .requiresAuthentication()
+            NavigationStack{
+                CartView()
+                    .requiresAuthentication()
+            }
         case .profile:
-            ProfileView()
-                .requiresAuthentication()
+            NavigationStack{
+                ProfileView()
+                    .requiresAuthentication()
+            }
         }
     }
 }
@@ -68,6 +75,9 @@ struct HomeView: View {
 }
 
 #Preview {
+    
+    
     HomeView()
         .environment(ProductStore(httpClient: .development))
+        .environment(CartStore(httpClient: .development))
 }

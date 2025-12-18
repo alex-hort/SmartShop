@@ -13,7 +13,15 @@ struct ProductListView: View {
     
     var body: some View {
         List(productStore.products){ product in
-            ProductCellView(product: product)
+            
+            NavigationLink{
+               ProductDetailsView(product: product)
+            } label: {
+                ProductCellView(product: product)
+                    .listRowSeparator(.hidden)
+            }
+            .navigationTitle("New Arrivals")
+            .listStyle(.plain)
           
         }.task {
             do{
@@ -30,4 +38,5 @@ struct ProductListView: View {
     NavigationStack{
         ProductListView()
     }.environment(ProductStore(httpClient: .development))
+        .environment(CartStore(httpClient: .development))
 }
