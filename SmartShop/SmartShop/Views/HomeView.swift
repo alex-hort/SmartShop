@@ -62,13 +62,14 @@ extension AppView{
 struct HomeView: View {
     
     @State var selection: AppView?
-    
+    @Environment(CartStore.self) private var cartSore
     var body: some View {
         TabView(selection: $selection) {
             ForEach(AppView.allCases){ view in
                view.destination
                     .tag(view as AppView?)
                     .tabItem{view.label}
+                    .badge((view as AppView?) == .cart ? cartSore.itemsCount: 0 )
             }
         }
     }

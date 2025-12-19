@@ -1,6 +1,39 @@
 
 const model = require('../models');
 
+exports.removeCartItem = async (req, res) => {
+
+  try{
+    const { cartItemId } = req.params;
+    const deleteItem = await model.CartItem.destroy({
+      where: {
+        id: cartItemId
+      }
+    });
+
+    if (!deleteItem) {
+      return res.status(404).json({
+        message: 'Cart item not found',
+        success: false
+      });
+    }
+
+
+
+  } catch (error) {
+    res.status(500).json({
+      message: 'An error occurred while removing the item from the cart',
+      success: false
+    });
+  }
+
+
+}
+
+
+
+
+
 exports.loadCart = async (req, res) => {
   try {
     const cart = await model.Cart.findOne({
