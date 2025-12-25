@@ -48,6 +48,7 @@ struct CartView: View {
     }
 }
 
+
 #Preview {
     NavigationStack{
         CartView().environment(CartStore(httpClient: .development))

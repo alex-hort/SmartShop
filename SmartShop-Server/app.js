@@ -3,7 +3,9 @@ const express = require('express')
 const authRoutes = require('./Routes/auth')
 const productsRoutes = require('./Routes/product')
 const cartRoutes = require('./Routes/cart')
+const userRoutes = require('./Routes/user')
 const authenticate = require('./middlewares/authMiddleware')
+
 
 const app = express()
 app.use('/api/uploads', express.static('uploads'))
@@ -17,6 +19,9 @@ app.use('/api/products', productsRoutes)
 
 //cart route
 app.use('/api/cart', authenticate,cartRoutes)
+
+//user route
+app.use('/api/user',authenticate, userRoutes)
 
 
 app.listen(8080, () => {
