@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    
     @AppStorage("userId") private var userId: String?
     @Environment(CartStore.self) private var cartStore
     @Environment(UserStore.self) private var userStore

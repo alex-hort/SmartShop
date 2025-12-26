@@ -69,7 +69,7 @@ struct HomeView: View {
                view.destination
                     .tag(view as AppView?)
                     .tabItem{view.label}
-                    .badge((view as AppView?) == .cart ? cartSore.itemsCount: 0 )
+                    .badge((view as AppView?) == .cart ? cartSore.cart?.itemsCount ?? 0: 0 )
             }
         }
     }

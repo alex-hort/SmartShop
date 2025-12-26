@@ -1,5 +1,35 @@
 
+const { Transaction } = require('sequelize');
 const model = require('../models');
+
+
+exports.deleteCartItem = async (cartId, transaction) => {
+ return await model.CartItem.destroy({
+    where: {
+      cart_id: cartId
+    },
+    transaction
+  });
+}
+
+
+
+
+
+exports.updateCartStatus = async (cartId, isActive, transaction) => {
+  await model.Cart.update(
+    { is_active: isActive },
+    {
+      where: { id: cartId, isActive: !isActive},
+      transaction
+    }
+  );
+}
+
+
+
+
+
 
 exports.removeCartItem = async (req, res) => {
 
