@@ -1,5 +1,5 @@
 {
-  "originHash" : "88cf1fc9d354e350e41dfcb2899b84f9312b5f8094ec0465100e0296cc38298e",
+  "originHash" : "8fd904fc6d7d15a044ed44588ab797df8b7b3a0d894ddc9b17c32a49e902b273",
   "pins" : [
     {
       "identity" : "jwtdecode.swift",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "36a5ce735a61c4bc119593f43ce2c027b4ca7392",
         "version" : "3.3.0"
+      }
+    },
+    {
+      "identity" : "stripe-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stripe/stripe-ios.git",
+      "state" : {
+        "revision" : "729265b745b5969ad5fc4805c25f2d37168ca685",
+        "version" : "25.3.1"
       }
     }
   ],

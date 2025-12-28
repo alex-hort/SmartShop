@@ -6,6 +6,7 @@ const cartRoutes = require('./Routes/cart')
 const userRoutes = require('./Routes/user')
 const authenticate = require('./middlewares/authMiddleware')
 const orderRoutes = require('./Routes/order')
+const paymentRoutes = require('./Routes/payment')
 
 const app = express()
 app.use('/api/uploads', express.static('uploads'))
@@ -25,6 +26,9 @@ app.use('/api/user',authenticate, userRoutes)
 
 //order route
 app.use('/api/orders', authenticate, orderRoutes)
+
+//payment route
+app.use('/api/payment', paymentRoutes)
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080')
